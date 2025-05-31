@@ -8,6 +8,8 @@ import lombok.Data;
 //UserDTO.java
 @Data
 public class UserDTO {
+ //use add changes
+ 
  private Long id;
  private String name;
  private List<Long> createdCourseIds;
