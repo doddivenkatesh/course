@@ -1,0 +1,26 @@
+package com.course.course.mapper;
+
+import org.springframework.stereotype.Component;
+
+import com.course.coures.dto.SubcategoryDTO;
+import com.course.course.model.Category;
+import com.course.course.model.Subcategory;
+
+@Component
+public class SubcategoryMapper {
+    public static SubcategoryDTO toDTO(Subcategory subcategory) {
+        SubcategoryDTO dto = new SubcategoryDTO();
+        dto.setId(subcategory.getId());
+        dto.setName(subcategory.getName());
+        dto.setCategoryId(subcategory.getCategory().getId());
+        return dto;
+    }
+
+    public static Subcategory toEntity(SubcategoryDTO dto, Category category) {
+        Subcategory subcategory = new Subcategory();
+        subcategory.setId(dto.getId());
+        subcategory.setName(dto.getName());
+        subcategory.setCategory(category);
+        return subcategory;
+    }
+}
