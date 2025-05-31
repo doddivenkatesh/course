@@ -9,6 +9,10 @@ import lombok.Data;
 
 @Schema(description = "Data transfer object for Course")
 
+
+
+@Data
+
 public class CourseDTO {
 
 	private Long id;
