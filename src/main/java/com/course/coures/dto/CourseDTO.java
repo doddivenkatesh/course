@@ -5,9 +5,14 @@ import java.util.Set;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 @Schema(description = "Data transfer object for Course")
+
+
+
 @Data
+
 public class CourseDTO {
 
 	private Long id;
