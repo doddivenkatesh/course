@@ -8,7 +8,7 @@ import lombok.Data;
 //UserDTO.java
 @Data
 public class UserDTO {
- //use add changes
+ //view
  
  private Long id;
  private String name;
