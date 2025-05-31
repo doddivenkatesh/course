@@ -1,5 +1,7 @@
 package com.course.coures.dto;
 
+import java.util.Set;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +19,8 @@ public class CourseDTO {
 	@Schema(description = "ID of the subcategory", example = "1")
 	@NotNull(message = "Subcategory ID is required")
 	private Long subcategoryId;
-
+	private Long creatorId;
+    private Set<Long> enrolledUserIds;
 	// Getters and setters
 	public Long getId() {
 		return id;
