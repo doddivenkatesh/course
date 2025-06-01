@@ -56,7 +56,7 @@ public class CourseService {
         return coursePage.map(CourseMapper::toDTO);
     }
  // hwllo  hii  hello 
- 
+    // hwllo  hii  hello
     public CourseDTO update(CourseDTO dto) {
         Course existing = courseRepo.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
@@ -65,7 +65,7 @@ public class CourseService {
         return mapper.toDTO(courseRepo.save(existing));
     }
 
-// added commit to delete
+// added commit to delete-dev
     public void delete(Long id) {
         courseRepo.deleteById(id);
     }
