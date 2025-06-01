@@ -27,7 +27,7 @@ public class CourseDTO {
 	private Long subcategoryId;
 	private Long creatorId;
     private Set<Long> enrolledUserIds;
-	// Getters and setters
+	
 	// remove getters and setters
 	public Long getId() {
 		return id;
