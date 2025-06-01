@@ -19,9 +19,7 @@ import com.course.course.repository.SubcategoryRepository;
 @Service
 public class CourseService {
 
-    //venkatesh-dev
-
-//venkatesh
+   //hello
 
     @Autowired
     private CourseRepository courseRepo;
@@ -59,14 +57,7 @@ public class CourseService {
 
         return coursePage.map(CourseMapper::toDTO);
     }
- // hwllo  hii  hello 
 
-    // hwllo  hii  hello-dev
-    //git
-    
-
-    // hwllo  hii  hellohi 
-    //he
     public CourseDTO update(CourseDTO dto) {
         Course existing = courseRepo.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
@@ -75,8 +66,7 @@ public class CourseService {
         return mapper.toDTO(courseRepo.save(existing));
     }
 
-// added commit to delete
-    //hi hii
+
     public void delete(Long id) {
         courseRepo.deleteById(id);
     }
