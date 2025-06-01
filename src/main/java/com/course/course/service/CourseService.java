@@ -56,7 +56,7 @@ public class CourseService {
         return coursePage.map(CourseMapper::toDTO);
     }
  // hwllo  hii  hello 
-    // hwllo  hii  hello
+    // hwllo  hii  hellohi
     public CourseDTO update(CourseDTO dto) {
         Course existing = courseRepo.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
