@@ -20,6 +20,7 @@ import com.course.course.repository.SubcategoryRepository;
 public class CourseService {
 
    //hello
+	// venkatesh
 
     @Autowired
     private CourseRepository courseRepo;
@@ -71,4 +72,7 @@ public class CourseService {
         courseRepo.deleteById(id);
     }
 
+    public String hello() {
+    	return "welcome";
+    }
 }
