@@ -60,8 +60,8 @@ public class CourseService {
     // hwllo  hii  hello-dev
     
 
-    // hwllo  hii  hellohi
-
+    // hwllo  hii  hellohi 
+    //he
     public CourseDTO update(CourseDTO dto) {
         Course existing = courseRepo.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
