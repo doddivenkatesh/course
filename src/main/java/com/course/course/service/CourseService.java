@@ -72,7 +72,7 @@ public class CourseService {
     }
 
 // added commit to delete
-    //hi
+    //hi hii
     public void delete(Long id) {
         courseRepo.deleteById(id);
     }
