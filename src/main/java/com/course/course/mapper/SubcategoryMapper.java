@@ -2,6 +2,7 @@ package com.course.course.mapper;
 
 import org.springframework.stereotype.Component;
 
+import com.course.coures.dto.CategoryDTO;
 import com.course.coures.dto.SubcategoryDTO;
 import com.course.course.model.Category;
 import com.course.course.model.Subcategory;
@@ -12,7 +13,12 @@ public class SubcategoryMapper {
         SubcategoryDTO dto = new SubcategoryDTO();
         dto.setId(subcategory.getId());
         dto.setName(subcategory.getName());
+        
+        CategoryDTO categoryDto = new CategoryDTO();
+        categoryDto.setId(subcategory.getCategory().getId());
+        categoryDto.setName(subcategory.getCategory().getName());
         dto.setCategoryId(subcategory.getCategory().getId());
+        dto.setCategory(categoryDto);
         return dto;
     }
 
