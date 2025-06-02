@@ -1,42 +1,228 @@
 package com.course.course.service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import com.course.coures.dto.UserDTO;
+import com.course.course.exception.ResourceNotFoundException;
+import com.course.course.mapper.UserMapper;
 import com.course.course.model.Course;
 import com.course.course.model.User;
 import com.course.course.repository.CourseRepository;
 import com.course.course.repository.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 //UserService.java
 @Service
 public class UserService {
 
- @Autowired
- private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
- @Autowired
- private CourseRepository courseRepository;
+	@Autowired
+	private CourseRepository courseRepository;
 
- public User createUser(String name) {
-     User user = new User();
-     user.setName(name);
-     return userRepository.save(user);
- }
+	public UserDTO createUser(UserDTO dto) {
+	    // Resolve createdCourses from courseRepository
+	    List<Course> createdCourses = dto.getCreatedCourseIds().stream()
+	            .map(id -> courseRepository.findById(id).orElse(null))
+	            .filter(Objects::nonNull)
+	            .collect(Collectors.toList());
 
- public void enrollUserInCourse(Long userId, Long courseId) {
-     User user = userRepository.findById(userId)
-             .orElseThrow(() -> new RuntimeException("User not found"));
-     Course course = courseRepository.findById(courseId)
-             .orElseThrow(() -> new RuntimeException("Course not found"));
-     user.getEnrolledCourses().add(course);
-     userRepository.save(user);
- }
+	    // Resolve enrolledCourses from courseRepository
+	    Set<Course> enrolledCourses = dto.getEnrolledCourseIds().stream()
+	            .map(id -> courseRepository.findById(id).orElse(null))
+	            .filter(Objects::nonNull)
+	            .collect(Collectors.toSet());
 
- public List<User> getAllUsers() {
-     return userRepository.findAll();
- }
+	    // Convert DTO to entity
+	    User user = UserMapper.toEntity(dto, createdCourses, enrolledCourses);
+
+	    // Save user entity to the database
+	    User saved = userRepository.save(user);
+
+	    // Convert saved entity back to DTO and return
+	    return UserMapper.toDTO(saved);
+	}
+	
+	 
+
+	public void enrollUserInCourse(Long userId, Long courseId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		Course course = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
+		user.getEnrolledCourses().add(course);
+		userRepository.save(user);
+	}
+
+	@Transactional(readOnly = true)
+	public List<UserDTO> findAllUsers() {
+		return userRepository.findAllWithCourses().stream()
+				.map(UserMapper :: toDTO)
+				.collect(Collectors.toList());
+	}
+	
+	//If you want to stick with default findAll():
+//	@Transactional(readOnly = true)
+//	public List<UserDTO> findAllUsers() {
+//	    List<User> users = userRepository.findAll();
+//	    users.forEach(user -> {
+//	        Hibernate.initialize(user.getEnrolledCourses());
+//	        Hibernate.initialize(user.getCreatedCourses());
+//	    });
+//	    return users.stream()
+//	                .map(UserMapper::toDTO)
+//	                .collect(Collectors.toList());
+//	}
+
+//	public List<UserDTO> findAllUsers() {
+//		return userRepository.findAll().stream()
+//				.map(UserMapper :: toDTO)
+//				.collect(Collectors.toList());
+//	}
+	
+//	@Transactional(readOnly = true)
+//	 public UserDTO findByUserId(Long id) {
+//	        User user = userRepository.findById(id)
+//	                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+//	       // Hibernate.initialize(user.getCreatedCourses());
+//	       // Hibernate.initialize(user.getEnrolledCourses());
+//	        return UserMapper.toDTO(user);
+//	    }
+	
+	@Transactional(readOnly = true)
+	public UserDTO findByUserId(Long id) {
+	    User user = userRepository.findById(id)
+	        .orElseThrow(() -> new RuntimeException("User not found"));
+	    return UserMapper.toDTO(user);
+	}
+
+	/*@Transactional
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        // Eagerly fetch user along with createdCourses and enrolledCourses
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        // Update fields manually or with a mapping function
+        user.setFullName(userDTO.getFullName());
+        user.setEmail(userDTO.getEmail());
+        user.setAddress(userDTO.getAddress());
+
+        // Save updated user
+        user = userRepository.save(user);
+
+        // Convert to DTO including initialized collections
+        return userMapper.toDTO(user);
+    }*/
+	@Transactional
+	 public UserDTO updateUser(Long id, UserDTO dto) {
+	        User existingUser = userRepository.findById(id)
+	                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+	        existingUser.setName(dto.getName());
+	        existingUser.setEmail(dto.getEmail());
+	        existingUser.setAddress(dto.getAddress());
+
+	        // Update created courses
+	        List<Course> createdCourses = dto.getCreatedCourseIds().stream()
+	                .map(courseRepository::findById)
+	                .filter(Optional::isPresent)
+	                .map(Optional::get)
+	                .collect(Collectors.toList());
+
+	        // Update enrolled courses
+	        Set<Course> enrolledCourses = dto.getEnrolledCourseIds().stream()
+	                .map(courseRepository::findById)
+	                .filter(Optional::isPresent)
+	                .map(Optional::get)
+	                .collect(Collectors.toSet());
+
+	        existingUser.setCreatedCourses(createdCourses);
+	        existingUser.setEnrolledCourses(enrolledCourses);
+
+	        User updatedUser = userRepository.save(existingUser);
+	        return UserMapper.toDTO(updatedUser);
+	    }
+	 
+	  public void deleteUser(Long id) {
+	        User user = userRepository.findById(id)
+	                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+	        userRepository.delete(user);
+	    }
+	  @Transactional(readOnly = true)
+	  public Page<UserDTO> getUsers(String nameFilter, int page, int size) {
+		    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+		    //Page<User> users = userRepository.findByNameContainingIgnoreCase(nameFilter, pageable);
+		    Page<User> users = userRepository.findAll(pageable); 
+		    return users.map(UserMapper::toDTO);
+		}
+	  public Page<UserDTO> getFilteredUsers(String name, String email, String address, int page, int size, String sortBy) {
+		    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+
+		    Page<User> users = userRepository
+		        .findByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndAddressContainingIgnoreCase(
+		            name != null ? name : "",
+		            email != null ? email : "",
+		            address != null ? address : "",
+		            pageable
+		        );
+
+		    return users.map(UserMapper::toDTO);
+		}
+
+	  public Page<UserDTO> getFilteredUsers(
+		        String name, String email, String address,
+		        int page, int size, String sortBy, String sortDir) {
+
+		    Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+		    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+		    Page<User> users = userRepository
+		        .findByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndAddressContainingIgnoreCase(
+		            name != null ? name : "",
+		            email != null ? email : "",
+		            address != null ? address : "",
+		            pageable
+		        );
+
+		    return users.map(UserMapper::toDTO);
+		}
+	  
+	  public Page<UserDTO> getFilteredUsers1(
+		        String name, String email, String address,
+		        int page, int size, String sortBy, String sortDir) {
+
+		        // Sanitize inputs to avoid NPE
+		        String safeName = (name == null) ? "" : name;
+		        String safeEmail = (email == null) ? "" : email;
+		        String safeAddress = (address == null) ? "" : address;
+
+		        // Default to ascending if invalid
+		        Sort.Direction direction = "desc".equalsIgnoreCase(sortDir) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		        // Validate sortBy: if empty or not a valid field, fallback to 'name'
+		        if (!StringUtils.hasText(sortBy)) {
+		            sortBy = "name";
+		        }
+
+		        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+		        Page<User> usersPage = userRepository.findByNameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndAddressContainingIgnoreCase(
+		            safeName, safeEmail, safeAddress, pageable);
+
+		        return usersPage.map(UserMapper::toDTO);
+		    }
+
 }
-

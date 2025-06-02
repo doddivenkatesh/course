@@ -1,0 +1,181 @@
+public static User toEntity(UserDTO dto, CourseRepository courseRepo) {
+    User user = new User();
+    user.setId(dto.getId());
+    user.setName(dto.getName());
+    user.setEmail(dto.getEmail());
+    user.setAddress(dto.getAddress());
+
+    // Fetch and set created courses
+    List<Course> createdCourses = dto.getCreatedCourseIds()
+                                     .stream()
+                                     .map(id -> courseRepo.findById(id).orElse(null))
+                                     .filter(Objects::nonNull)
+                                     .collect(Collectors.toList());
+    user.setCreatedCourses(createdCourses);
+
+    // Fetch and set enrolled courses
+    Set<Course> enrolledCourses = dto.getEnrolledCourseIds()
+                                     .stream()
+                                     .map(id -> courseRepo.findById(id).orElse(null))
+                                     .filter(Objects::nonNull)
+                                     .collect(Collectors.toSet());
+    user.setEnrolledCourses(enrolledCourses);
+
+    return user;
+}
+
+
+package com.springsecurity.springsecurity.mapper;
+
+import com.springsecurity.springsecurity.dto.UserDTO;
+import com.springsecurity.springsecurity.entity.Course;
+import com.springsecurity.springsecurity.entity.User;
+import com.springsecurity.springsecurity.repo.CourseRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Component
+@RequiredArgsConstructor
+public class UserMapper {
+
+    private final CourseRepository courseRepository;
+
+    public UserDTO toDTO(User user) {
+        if (user == null) return null;
+
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setAddress(user.getAddress());
+
+        // Convert list of created course entities to list of course IDs
+        List<Long> createdCourseIds = user.getCreatedCourses()
+                                          .stream()
+                                          .map(Course::getId)
+                                          .collect(Collectors.toList());
+        dto.setCreatedCourseIds(createdCourseIds);
+
+        // Convert set of enrolled course entities to set of course IDs
+        Set<Long> enrolledCourseIds = user.getEnrolledCourses()
+                                          .stream()
+                                          .map(Course::getId)
+                                          .collect(Collectors.toSet());
+        dto.setEnrolledCourseIds(enrolledCourseIds);
+
+        return dto;
+    }
+
+    public User toEntity(UserDTO dto) {
+        if (dto == null) return null;
+
+        User user = new User();
+        user.setId(dto.getId());
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setAddress(dto.getAddress());
+
+        // Convert course IDs to Course entities
+        if (dto.getCreatedCourseIds() != null) {
+            List<Course> createdCourses = dto.getCreatedCourseIds()
+                                             .stream()
+                                             .map(courseRepository::findById)
+                                             .filter(Optional::isPresent)
+                                             .map(Optional::get)
+                                             .collect(Collectors.toList());
+            user.setCreatedCourses(createdCourses);
+        }
+
+        if (dto.getEnrolledCourseIds() != null) {
+            Set<Course> enrolledCourses = dto.getEnrolledCourseIds()
+                                             .stream()
+                                             .map(courseRepository::findById)
+                                             .filter(Optional::isPresent)
+                                             .map(Optional::get)
+                                             .collect(Collectors.toSet());
+            user.setEnrolledCourses(enrolledCourses);
+        }
+
+        return user;
+    }
+}
+@RequiredArgsConstructor
+@Service
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    @Override
+    public UserDTO getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return userMapper.toDTO(user);
+    }
+}
+
+
+
+// entity 
+public class UserMapper {
+
+    // This method requires access to CourseRepository to look up Course entities
+    public static User toEntity(UserDTO dto, CourseRepository courseRepository) {
+        User user = new User();
+        user.setId(dto.getId());
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setAddress(dto.getAddress());
+
+        // Convert course IDs to Course entities for createdCourses
+        if (dto.getCreatedCourseIds() != null) {
+            List<Course> createdCourses = dto.getCreatedCourseIds().stream()
+                    .map(id -> courseRepository.findById(id).orElse(null))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            user.setCreatedCourses(createdCourses);
+        }
+
+        // Convert course IDs to Course entities for enrolledCourses
+        if (dto.getEnrolledCourseIds() != null) {
+            Set<Course> enrolledCourses = dto.getEnrolledCourseIds().stream()
+                    .map(id -> courseRepository.findById(id).orElse(null))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+            user.setEnrolledCourses(enrolledCourses);
+        }
+
+        return user;
+    }
+}
+
+
+public static User toEntity(UserDTO dto, List<Course> createdCourses, Set<Course> enrolledCourses) {
+    User user = new User();
+    user.setId(dto.getId());
+    user.setName(dto.getName());
+    user.setEmail(dto.getEmail());
+    user.setAddress(dto.getAddress());
+    user.setCreatedCourses(createdCourses);
+    user.setEnrolledCourses(enrolledCourses);
+    return user;
+}
+
+
+List<Course> createdCourses = dto.getCreatedCourseIds().stream()
+        .map(id -> courseRepository.findById(id).orElse(null))
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+
+Set<Course> enrolledCourses = dto.getEnrolledCourseIds().stream()
+        .map(id -> courseRepository.findById(id).orElse(null))
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+
+User user = UserMapper.toEntity(dto, createdCourses, enrolledCourses);
+
