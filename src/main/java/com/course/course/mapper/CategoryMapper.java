@@ -1,6 +1,7 @@
 package com.course.course.mapper;
 
 import com.course.coures.dto.CategoryDTO;
+import com.course.coures.dto.SubcategoryDTO;
 import com.course.course.model.Category;
 
 public class CategoryMapper {
@@ -8,6 +9,10 @@ public class CategoryMapper {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(category.getId());
         dto.setName(category.getName());
+        SubcategoryDTO subcategoryDTO = new SubcategoryDTO();
+        //dto.setSubcategoryDTO(category.getSubcategories().addAll(null));
+       // subcategoryDTO.setId(category.getSubcategories().getId());
+        //subcategoryDTO.setName(category.getSubcategories().getName());
         return dto;
     }
 

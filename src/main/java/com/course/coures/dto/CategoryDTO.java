@@ -1,13 +1,16 @@
 package com.course.coures.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 //import jakarta.validation.constraints.NotBlank;
+@Data
 public class CategoryDTO {
+	
     private Long id;
     @NotBlank(message = "Name is mandatory")
     private String name;
-
+    private SubcategoryDTO subcategoryDTO;
     // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
