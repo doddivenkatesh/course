@@ -17,11 +17,15 @@ public class UserMapper {
 		dto.setEmail(user.getEmail());
 		dto.setAddress(user.getAddress());
 		// Convert created courses to IDs
+		 if (user.getCreatedCourses() != null) {
 		List<Long> createdCourseIds = user.getCreatedCourses().stream().map(Course::getId).collect(Collectors.toList());
 		dto.setCreatedCourseIds(createdCourseIds);
+		 }
 		// Convert enrolled courses to IDs
+		 if (user.getEnrolledCourses() != null) {
 		Set<Long> enrolledCourseIds = user.getEnrolledCourses().stream().map(Course::getId).collect(Collectors.toSet());
 		dto.setEnrolledCourseIds(enrolledCourseIds);
+		 }
 		return dto;
 	}
 
