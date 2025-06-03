@@ -1,5 +1,7 @@
 package com.course.course.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import com.course.coures.dto.UserDTO;
 import com.course.course.exception.ResourceNotFoundException;
+import com.course.course.exception.UserNotFoundException;
 import com.course.course.mapper.UserMapper;
 import com.course.course.model.Course;
 import com.course.course.model.User;
@@ -47,6 +50,15 @@ public class UserService {
 	            .map(id -> courseRepository.findById(id).orElse(null))
 	            .filter(Objects::nonNull)
 	            .collect(Collectors.toSet());
+	    
+//	    List<Long> createdCourseIds = dto.getCreatedCourseIds() != null
+//	    	    ? dto.getCreatedCourseIds()
+//	    	    : new ArrayList<>();
+//	    
+//
+//	    	Set<Long> enrolledCourseIds = dto.getEnrolledCourseIds() != null
+//	    	    ? dto.getEnrolledCourseIds()
+//	    	    : new HashSet<>();
 
 	    // Convert DTO to entity
 	    User user = UserMapper.toEntity(dto, createdCourses, enrolledCourses);
@@ -105,7 +117,7 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public UserDTO findByUserId(Long id) {
 	    User user = userRepository.findById(id)
-	        .orElseThrow(() -> new RuntimeException("User not found"));
+	        .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
 	    return UserMapper.toDTO(user);
 	}
 
@@ -158,7 +170,7 @@ public class UserService {
 	 
 	  public void deleteUser(Long id) {
 	        User user = userRepository.findById(id)
-	                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+	                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 	        userRepository.delete(user);
 	    }
 	  @Transactional(readOnly = true)
