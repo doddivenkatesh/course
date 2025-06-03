@@ -1,4 +1,4 @@
-package com.course.coures.request;
+package com.course.coures.response;
 
 import com.course.coures.dto.CategoryDTO;
 

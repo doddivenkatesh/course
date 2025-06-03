@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.course.coures.dto.SubcategoryDTO;
 import com.course.coures.request.SubcategoryRequestDTO;
-import com.course.coures.request.SubcategoryResponseDTO;
+import com.course.coures.response.SubcategoryResponseDTO;
 import com.course.course.service.SubcategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;

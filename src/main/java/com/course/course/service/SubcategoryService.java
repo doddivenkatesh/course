@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.course.coures.dto.CategoryDTO;
 import com.course.coures.dto.SubcategoryDTO;
 import com.course.coures.request.SubcategoryRequestDTO;
-import com.course.coures.request.SubcategoryResponseDTO;
+import com.course.coures.response.SubcategoryResponseDTO;
 import com.course.course.exception.ResourceNotFoundException;
 import com.course.course.mapper.SubcategoryMapper;
 import com.course.course.model.Category;

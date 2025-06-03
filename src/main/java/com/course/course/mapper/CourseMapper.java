@@ -3,12 +3,14 @@ package com.course.course.mapper;
 import org.springframework.stereotype.Component;
 
 import com.course.coures.dto.CourseDTO;
+import com.course.coures.response.CourseResponseDTO;
 import com.course.course.model.Course;
 import com.course.course.model.Subcategory;
 @Component
 public class CourseMapper {
     public static CourseDTO toDTO(Course course) {
         CourseDTO dto = new CourseDTO();
+        
         dto.setId(course.getId());
         dto.setTitle(course.getTitle());
         dto.setDescription(course.getDescription());
@@ -24,4 +26,6 @@ public class CourseMapper {
         course.setSubcategory(subcategory);
         return course;
     }
+    
+   
 }
