@@ -12,3 +12,4 @@ public class CourseRequestDTO {
 	    private String subcategory;   // subcategory name
 	    private Long creatorId;
 }
+
