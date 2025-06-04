@@ -15,7 +15,7 @@ import lombok.Setter;
 public class CategoryDTO {
 	
     private Long id;
-    @NotBlank(message = "Name is mandatory")
+   // @NotBlank(message = "Name is mandatory")
     private String name;
     private List<SubcategoryDTO> subcategories ;
     // Getters and setters
