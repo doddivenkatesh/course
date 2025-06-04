@@ -16,13 +16,13 @@ public class CourseDTO {
 
 	private Long id;
 	@Schema(description = "Title of the course", example = "Spring Boot Basics")
-	@NotBlank(message = "Title is mandatory")
+	//@NotBlank(message = "Title is mandatory")
 	private String title;
-	@NotBlank(message = "Description is mandatory")
+	//@NotBlank(message = "Description is mandatory")
 	@Schema(description = "Description of the course", example = "Introduction to Spring Boot")
 	private String description;
 	@Schema(description = "ID of the subcategory", example = "1")
-	@NotNull(message = "Subcategory ID is required")
+	//@NotNull(message = "Subcategory ID is required")
 	private Long subcategoryId;
 	private Long creatorId;
     private Set<Long> enrolledUserIds;
