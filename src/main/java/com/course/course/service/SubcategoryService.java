@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.course.coures.dto.CategoryDTO;
-import com.course.coures.dto.SubcategoryDTO;
+import com.course.coures.dto.SubCategoryDTO;
 import com.course.coures.request.SubcategoryRequestDTO;
 import com.course.coures.response.SubcategoryResponseDTO;
 import com.course.course.exception.ResourceNotFoundException;
@@ -29,13 +29,13 @@ public class SubcategoryService {
     @Autowired
     private SubcategoryMapper mapper;
 
-    public List<SubcategoryDTO> getAllSubcategories() {
+    public List<SubCategoryDTO> getAllSubcategories() {
         return subcategoryRepo.findAll().stream()
                 .map(SubcategoryMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public SubcategoryDTO createSubcategory(SubcategoryDTO dto) {
+    public SubCategoryDTO createSubcategory(SubCategoryDTO dto) {
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
@@ -62,7 +62,7 @@ public class SubcategoryService {
                 .collect(Collectors.toList());
     }
  
-    public SubcategoryDTO update(SubcategoryDTO dto) {
+    public SubCategoryDTO update(SubCategoryDTO dto) {
         Subcategory existing = subcategoryRepo.findById(dto.getId())
                 .orElseThrow(() ->new ResourceNotFoundException("Subcategory not found"));
         existing.setName(dto.getName());
@@ -81,7 +81,7 @@ public class SubcategoryService {
         
       
 
-        dto.setCategory(catDto);
+        //dto.setCategory(catDto);
         return dto;
     }
     public void delete(Long id) {

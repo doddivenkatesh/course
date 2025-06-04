@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.course.coures.dto.SubcategoryDTO;
+import com.course.coures.dto.SubCategoryDTO;
 import com.course.coures.request.SubcategoryRequestDTO;
 import com.course.coures.response.SubcategoryResponseDTO;
 import com.course.course.service.SubcategoryService;
@@ -46,18 +46,18 @@ public class SubcategoryController {
     
     @Operation(summary = "Get all subcategories")
     @GetMapping
-    public List<SubcategoryDTO> getAllSubcategories() {
+    public List<SubCategoryDTO> getAllSubcategories() {
         return subcategoryService.getAllSubcategories();
     }
     @Operation(summary = "Create subcategory")
     @PostMapping
-    public SubcategoryDTO createSubcategory(@Valid @RequestBody SubcategoryDTO dto) {
+    public SubCategoryDTO createSubcategory(@Valid @RequestBody SubCategoryDTO dto) {
     	           
         return subcategoryService.createSubcategory(dto);
     }
     @Operation(summary = "Update subcategory by ID")
     @PutMapping("/{id}")
-    public SubcategoryDTO update(@PathVariable Long id, @Valid @RequestBody SubcategoryDTO dto) {
+    public SubCategoryDTO update(@PathVariable Long id, @Valid @RequestBody SubCategoryDTO dto) {
         dto.setId(id);
         return subcategoryService.update(dto);
     }

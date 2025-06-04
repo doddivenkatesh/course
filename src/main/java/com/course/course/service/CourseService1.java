@@ -1,6 +1,7 @@
 package com.course.course.service;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class CourseService1 {
     private final UserRepository userRepository;
 
    
-    public CourseResponseDTO createCourse1(CourseRequestDTO request) {
+    public CourseResponseDTO createCourse1(CourseRequestDTO request) {                   
         // Find or create Category
         Category category = categoryRepository.findByName(request.getCategory())
                 .orElseGet(() -> {
@@ -43,15 +44,21 @@ public class CourseService1 {
                     return categoryRepository.save(newCat);
                 });
 
+     // Handle optional subcategory
         // Find or create Subcategory
-        Subcategory subcategory = subcategoryRepository.findByNameAndCategoryName(
-                        request.getSubcategory(), request.getCategory())
+
+       
+        Subcategory subcategory = null;
+        if (request.getSubCategory() != null) {
+            subcategory = subcategoryRepository.findByNameAndCategoryName(
+                    request.getSubCategory(), request.getCategory())
                 .orElseGet(() -> {
                     Subcategory sub = new Subcategory();
-                    sub.setName(request.getSubcategory());
+                    sub.setName(request.getSubCategory());
                     sub.setCategory(category);
                     return subcategoryRepository.save(sub);
                 });
+        }
 
         // Fetch creator
         User creator = userRepository.findById(request.getCreatorId())
@@ -62,9 +69,21 @@ public class CourseService1 {
         course.setTitle(request.getTitle());
         course.setDescription(request.getDescription());
         course.setDuration(request.getDuration());
+        
+        course.setReleaseDate(request.getReleaseDate());
+        course.setAvailable(request.isAvailable());
+        course.setStatus(request.getStatus());
         course.setCategory(category);
+        System.out.println("Subcategory: " + subcategory.getName());
+        System.out.println("Assigned Subcategory: " + course.getSubcategory());
         course.setSubcategory(subcategory);
         course.setCreator(creator);
+        course.setPrice(request.getPrice());
+        course.setLanguage(request.getLanguage());
+        course.setPublished(request.isPublished());
+        course.setLevel(request.getLevel());
+        course.setThumbnailUrl(request.getThumbnailUrl());
+       
 
         return CourseMapper1.toDTO1(courseRepository.save(course));
     }
@@ -94,7 +113,7 @@ public class CourseService1 {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         Subcategory subcategory = subcategoryRepository.findByNameAndCategoryName(
-                request.getSubcategory(), request.getCategory())
+                request.getSubCategory(), request.getCategory())
                 .orElseThrow(() -> new RuntimeException("Subcategory not found"));
 
         User creator = userRepository.findById(request.getCreatorId())

@@ -5,14 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SubcategoryDTO {
+public class SubCategoryDTO {
 	private Long id;
-	@NotBlank(message = "Name is mandatory")
+	//@NotBlank(message = "Name is mandatory")
 	private String name;
-	@NotNull(message = "Category ID is required")
+	//@NotNull(message = "Category ID is required")
 	private Long categoryId;
 	private CategoryDTO category;
-
+    private String categoryName;
 	// Getters and setters
 	public Long getId() {
 		return id;

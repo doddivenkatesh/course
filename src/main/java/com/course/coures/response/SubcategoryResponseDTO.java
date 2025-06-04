@@ -9,5 +9,5 @@ public class SubcategoryResponseDTO {
 
 	 private Long id;
 	    private String name;
-	    private CategoryDTO category;
+	    //private CategoryDTO category;
 }
