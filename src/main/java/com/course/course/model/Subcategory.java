@@ -11,6 +11,10 @@ public class Subcategory {
 
     private String name;
 
+    
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //private Category category;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -28,3 +32,9 @@ public class Subcategory {
     public List<Course> getCourses() { return courses; }
     public void setCourses(List<Course> courses) { this.courses = courses; }
 }
+
+//Course links to both Category, Subcategory, and User.
+
+//Category has a list of Subcategory.
+
+//Subcategory has a reference back to its Category.

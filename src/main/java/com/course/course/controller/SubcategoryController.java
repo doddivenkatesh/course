@@ -3,6 +3,8 @@ package com.course.course.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.course.coures.dto.SubcategoryDTO;
+import com.course.coures.dto.SubCategoryDTO;
+import com.course.coures.request.SubcategoryRequestDTO;
+import com.course.coures.response.SubcategoryResponseDTO;
 import com.course.course.service.SubcategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,19 +30,34 @@ public class SubcategoryController {
     @Autowired
     private SubcategoryService subcategoryService;
 
+    
+    
+    
+    @PostMapping("create")
+    public ResponseEntity<SubcategoryResponseDTO> create(@RequestBody SubcategoryRequestDTO dto) {
+        SubcategoryResponseDTO response = subcategoryService.createSubcategory(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAll")
+    public List<SubcategoryResponseDTO> getAll() {
+        return subcategoryService.getAllSubcategories1();
+    }
+    
     @Operation(summary = "Get all subcategories")
     @GetMapping
-    public List<SubcategoryDTO> getAllSubcategories() {
+    public List<SubCategoryDTO> getAllSubcategories() {
         return subcategoryService.getAllSubcategories();
     }
     @Operation(summary = "Create subcategory")
     @PostMapping
-    public SubcategoryDTO createSubcategory(@Valid @RequestBody SubcategoryDTO dto) {
+    public SubCategoryDTO createSubcategory(@Valid @RequestBody SubCategoryDTO dto) {
+    	           
         return subcategoryService.createSubcategory(dto);
     }
     @Operation(summary = "Update subcategory by ID")
     @PutMapping("/{id}")
-    public SubcategoryDTO update(@PathVariable Long id, @Valid @RequestBody SubcategoryDTO dto) {
+    public SubCategoryDTO update(@PathVariable Long id, @Valid @RequestBody SubCategoryDTO dto) {
         dto.setId(id);
         return subcategoryService.update(dto);
     }

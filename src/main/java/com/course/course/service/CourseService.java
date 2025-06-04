@@ -19,9 +19,7 @@ import com.course.course.repository.SubcategoryRepository;
 @Service
 public class CourseService {
 
-   //hello
-	// venkatesh
-	 // alpha
+
     @Autowired
     private CourseRepository courseRepo;
 
