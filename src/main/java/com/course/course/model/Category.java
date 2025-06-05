@@ -3,7 +3,6 @@ package com.course.course.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,11 +23,22 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER,orphanRemoval = true)
     private List<Subcategory> subcategories = new ArrayList<>();
 
+
     //    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
    //    private List<Subcategory> subcategories;
 
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    
+    private List<Subcategory> subcategories = new ArrayList<>();
+
+
+    //@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    //private List<Subcategory> subcategories;
+
+
    //@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     //private List<Subcategory> subcategories = new ArrayList<>();
+
 
     // Getters and setters
     public Long getId() { return id; }

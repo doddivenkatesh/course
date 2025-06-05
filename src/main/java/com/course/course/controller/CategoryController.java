@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.course.coures.dto.CategoryDTO;
-import com.course.coures.dto.UserDTO;
 import com.course.course.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +38,7 @@ public class CategoryController {
 
     @Operation(summary = "Create a new category")
     @PostMapping
-    public CategoryDTO createCategory(@Valid @RequestBody CategoryDTO dto) {
+    public CategoryDTO createCategory( @RequestBody CategoryDTO dto) {
         return categoryService.createCategory(dto);
     }
     
