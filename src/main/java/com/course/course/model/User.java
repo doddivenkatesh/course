@@ -44,7 +44,7 @@ public class User {
     private Date birthDate;
     
     @OneToMany(mappedBy = "creator")
-   private List<Course> createdCourses = new ArrayList<>();
+    private List<Course> createdCourses = new ArrayList<>();
 //    @OneToMany(mappedBy = "creator", fetch = FetchType.EAGER)
 //    private List<Course> createdCourses = new ArrayList<>();
 

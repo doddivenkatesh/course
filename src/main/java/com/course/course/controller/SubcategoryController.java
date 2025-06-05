@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.course.coures.dto.SubCategoryDTO;
 import com.course.coures.request.SubcategoryRequestDTO;
+import com.course.coures.response.ApiResponse;
 import com.course.coures.response.SubcategoryResponseDTO;
 import com.course.course.service.SubcategoryService;
 
@@ -34,9 +35,11 @@ public class SubcategoryController {
     
     
     @PostMapping("create")
-    public ResponseEntity<SubcategoryResponseDTO> create(@RequestBody SubcategoryRequestDTO dto) {
-        SubcategoryResponseDTO response = subcategoryService.createSubcategory(dto);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> createSubcategory(
+            @RequestBody SubcategoryRequestDTO request) {
+        SubcategoryResponseDTO dto = subcategoryService.createSubcategory(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>("Subcategory created successfully", dto));
     }
 
     @GetMapping("/getAll")
