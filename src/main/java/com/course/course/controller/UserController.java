@@ -46,6 +46,10 @@ public class UserController {
 	        return ResponseEntity.ok(updatedUser);
 	    }
 	    
+//	    @GetMapping("/getAllUsers")
+//	     public List<UserDTO> users = userService.getAllUsers1();
+//	     List<UserDTO> users = userService.findAllUsers();
+//	     return new ApiResponse<UserDTO>("Users fetched", users);
 	    @GetMapping
 	    public ResponseEntity<List<UserDTO>> getAllUsers() {
 	        List<UserDTO> users = userService.findAllUsers();

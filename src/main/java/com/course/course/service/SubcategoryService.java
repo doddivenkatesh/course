@@ -10,6 +10,7 @@ import com.course.coures.dto.CategoryDTO;
 import com.course.coures.dto.SubCategoryDTO;
 import com.course.coures.request.SubcategoryRequestDTO;
 import com.course.coures.response.SubcategoryResponseDTO;
+import com.course.course.exception.DuplicateResourceException;
 import com.course.course.exception.ResourceNotFoundException;
 import com.course.course.mapper.SubcategoryMapper;
 import com.course.course.model.Category;
@@ -45,9 +46,17 @@ public class SubcategoryService {
     }
     
     public SubcategoryResponseDTO createSubcategory(SubcategoryRequestDTO request) {
+        // 1. Check if category exists
         Category category = categoryRepo.findById(request.getCategoryId())
             .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
+        // 2. Optional: Prevent duplicate subcategories under the same category
+        boolean exists = subcategoryRepo.existsByNameAndCategoryId(request.getName(), request.getCategoryId());
+        if (exists) {
+            throw new DuplicateResourceException("Subcategory already exists under this category");
+        }
+
+        // 3. Create and save subcategory
         Subcategory subcategory = new Subcategory();
         subcategory.setName(request.getName());
         subcategory.setCategory(category);
@@ -56,6 +65,7 @@ public class SubcategoryService {
 
         return mapToDTO(saved);
     }
+
     public List<SubcategoryResponseDTO> getAllSubcategories1() {
         return subcategoryRepo.findAll().stream()
                 .map(this::mapToDTO)

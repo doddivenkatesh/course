@@ -59,7 +59,6 @@ public class CourseMapper1 {
 	                    subDto.setName(sub.getName());
 	                    subDto.setCategoryId(sub.getCategory().getId());
 	                    subDto.setCategoryName(sub.getCategory().getName());
-	                    
 	                    return subDto;
 	                }).collect(Collectors.toList());
 	        catDto.setSubcategories(subCategoryDTOList);
@@ -75,9 +74,6 @@ public class CourseMapper1 {
 	            subDto.setCategoryName(course.getSubcategory().getCategory().getName());
 	            dto.setSubCategoryDto(subDto);
 	        }
-
-	        
-	        
 	        return dto;
 	    }
 	

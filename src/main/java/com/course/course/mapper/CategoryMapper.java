@@ -35,10 +35,6 @@ public class CategoryMapper {
             List<Subcategory> subcategories = new ArrayList<>();
             for (SubCategoryDTO subDto : dto.getSubcategories()) {
                 Subcategory sub = new Subcategory();
-                if (subDto.getId() != null) {
-                    sub.setId(subDto.getId());
-                }
-               // sub.setId(subDto.getId());
                 sub.setName(subDto.getName());
                 sub.setCategory(category); // set back reference
                 subcategories.add(sub);

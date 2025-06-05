@@ -20,6 +20,12 @@ public class Category {
 
     private String name;
     
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER,orphanRemoval = true)
+    private List<Subcategory> subcategories = new ArrayList<>();
+
+
+    //    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+   //    private List<Subcategory> subcategories;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     
@@ -28,6 +34,7 @@ public class Category {
 
     //@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     //private List<Subcategory> subcategories;
+
 
    //@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     //private List<Subcategory> subcategories = new ArrayList<>();

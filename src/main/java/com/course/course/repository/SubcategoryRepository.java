@@ -9,4 +9,6 @@ import com.course.course.model.User;
 
 public interface SubcategoryRepository extends JpaRepository<Subcategory, Long> {
 
-	Optional<Subcategory> findByNameAndCategoryName(String subName, String categoryName);}
+	Optional<Subcategory> findByNameAndCategoryName(String subName, String categoryName);
+
+	boolean existsByNameAndCategoryId(String name, Long categoryId);}
