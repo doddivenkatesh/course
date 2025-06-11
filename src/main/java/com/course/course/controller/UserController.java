@@ -1,10 +1,21 @@
 package com.course.course.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +27,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.course.coures.dto.UserDTO;
+import com.course.course.model.User;
+import com.course.course.repository.UserRepository;
 import com.course.course.service.UserService;
 @RestController
 @RequestMapping("/api/users")
@@ -26,7 +40,8 @@ public class UserController {
 
 	@Autowired
 	public UserService userService;
-	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
@@ -68,6 +83,80 @@ public class UserController {
 	            @RequestParam(defaultValue = "0") int page,
 	            @RequestParam(defaultValue = "10") int size) {
 	        return ResponseEntity.ok(userService.getUsers(name, page, size));
+	    }
+	    
+	    @PostMapping("/upload")
+	    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+	        try {
+	            userService.saveUsersFromFile(file);
+	            return ResponseEntity.ok("File uploaded and users saved successfully.");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed: " + e.getMessage());
+	        }
+	    }
+	    
+	    @PostMapping("/load-from-csv")
+	    public ResponseEntity<String> loadUsers() {
+	        try {
+	            userService.loadUsersFromCSV();
+	            return ResponseEntity.ok("Users loaded successfully from CSV");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Error: " + e.getMessage());
+	        }
+	    }
+	    
+	    @PostMapping("/load-from-excel")
+	    public ResponseEntity<String> loadUsersFromExcel() {
+	        try {
+	            userService.loadUsersFromExcel();
+	            return ResponseEntity.ok("Users loaded from Excel successfully.");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Error: " + e.getMessage());
+	        }
+	    }
+	    
+	    @GetMapping("/download-excel")
+	    public ResponseEntity<Resource> downloadExcelFile() throws IOException {
+	        ClassPathResource file = new ClassPathResource("Project-Management-Sample-Data.xlsx");
+
+//	        HttpHeaders headers = new HttpHeaders();
+//	        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=users.xlsx");
+	        return ResponseEntity.ok()
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=users.xlsx")
+	                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+	                .contentLength(file.contentLength())
+	                .body(file);
+//	        return ResponseEntity.ok()
+//	                .headers(headers)
+//	                .contentLength(file.contentLength())
+//	                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+//	                .body(file);
+	    }
+	    
+	    
+	    @GetMapping("/download-users-csv")
+	    public ResponseEntity<Resource> downloadUsersCsv() throws IOException {
+	        List<User> users = userRepository.findAll();
+
+	        StringWriter writer = new StringWriter();
+	        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
+	                .withHeader("ID", "Name", "Email", "Phone"));
+
+	        for (User user : users) {
+	            csvPrinter.printRecord(user.getId(), user.getName(), user.getEmail(), user.getAddress());
+	        }
+
+	        csvPrinter.flush();
+	        ByteArrayInputStream csvInput = new ByteArrayInputStream(writer.toString().getBytes(StandardCharsets.UTF_8));
+
+	        InputStreamResource file = new InputStreamResource(csvInput);
+
+	        return ResponseEntity.ok()
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=customers-100.csv")
+	                .contentType(MediaType.parseMediaType("text/csv"))
+	                .body(file);
 	    }
 	    
 	   /* @GetMapping("name")

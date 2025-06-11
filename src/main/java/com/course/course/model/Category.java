@@ -3,6 +3,7 @@ package com.course.course.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,9 +28,9 @@ public class Category {
     //    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
    //    private List<Subcategory> subcategories;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+   // @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     
-    private List<Subcategory> subcategories = new ArrayList<>();
+    //private List<Subcategory> subcategories = new ArrayList<>();
 
 
     //@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
