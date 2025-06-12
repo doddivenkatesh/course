@@ -25,10 +25,7 @@ public class Category {
     private List<Subcategory> subcategories = new ArrayList<>();
 
 
-    //    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-   //    private List<Subcategory> subcategories;
 
-   
 
 
     //@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
