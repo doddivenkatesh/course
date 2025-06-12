@@ -180,8 +180,17 @@ public class UserService {
 	                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 	        userRepository.delete(user);
 	    }
-	  @Transactional(readOnly = true)
-	  public Page<UserDTO> getUsers(String nameFilter, int page, int size) {
+	  
+	  public Page<User> getUsers(String name, int page, int size) {
+	        PageRequest pageable = PageRequest.of(page, size);
+	        if (name == null || name.isBlank()) {
+	            return userRepository.findAll(pageable);
+	        } else {
+	            return userRepository.findByNameContainingIgnoreCase(name, pageable);
+	        }
+	    }
+	  @Transactional(readOnly = true)	
+	  public Page<UserDTO> getUsers1(String nameFilter, int page, int size) {
 		    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
 		    //Page<User> users = userRepository.findByNameContainingIgnoreCase(nameFilter, pageable);
 		    Page<User> users = userRepository.findAll(pageable); 
@@ -200,7 +209,7 @@ public class UserService {
 
 		    return users.map(UserMapper::toDTO);
 		}
-
+	
 	  public Page<UserDTO> getFilteredUsers(
 		        String name, String email, String address,
 		        int page, int size, String sortBy, String sortDir) {

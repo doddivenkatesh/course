@@ -77,12 +77,21 @@ public class UserController {
 	        return ResponseEntity.noContent().build();
 	    }
 	    
+	    @GetMapping("/page")
+	    public Page<User> getUsers(
+	            @RequestParam(required = false) String name,
+	            @RequestParam(defaultValue = "0") int page,
+	            @RequestParam(defaultValue = "5") int size
+	    ) {
+	        return userService.getUsers(name, page, size);
+	    }
+
 	    @GetMapping("/pagination")
-	    public ResponseEntity<Page<UserDTO>> getUsers(
+	    public ResponseEntity<Page<UserDTO>> getUsers1(
 	            @RequestParam(defaultValue = "") String name,
 	            @RequestParam(defaultValue = "0") int page,
 	            @RequestParam(defaultValue = "10") int size) {
-	        return ResponseEntity.ok(userService.getUsers(name, page, size));
+	        return ResponseEntity.ok(userService.getUsers1(name, page, size));
 	    }
 	    
 	    @PostMapping("/upload")
