@@ -11,3 +11,4 @@ public class CourseApplication {
 	}
 
 }
+//https://chatgpt.com/share/684a7c5a-797c-800f-854d-6bd07c45ae39
