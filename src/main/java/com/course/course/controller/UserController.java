@@ -60,8 +60,8 @@ public class UserController {
 	        UserDTO updatedUser = userService.updateUser(id, userDTO);
 	        return ResponseEntity.ok(updatedUser);
 	    }
-	    
-//	    @GetMapping("/getAllUsers")
+	     
+//	     @GetMapping("/getAllUsers")
 //	     public List<UserDTO> users = userService.getAllUsers1();
 //	     List<UserDTO> users = userService.findAllUsers();
 //	     return new ApiResponse<UserDTO>("Users fetched", users);
