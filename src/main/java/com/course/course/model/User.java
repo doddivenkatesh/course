@@ -1,6 +1,5 @@
 package com.course.course.model;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,10 +37,10 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd") // For form inputs (e.g., Spring MVC)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // For JSON serialization
-    private Date birthDate;
+//    @Temporal(TemporalType.DATE)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd") // For form inputs (e.g., Spring MVC)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // For JSON serialization
+//    private Date birthDate;
     
     @OneToMany(mappedBy = "creator")
     private List<Course> createdCourses = new ArrayList<>();

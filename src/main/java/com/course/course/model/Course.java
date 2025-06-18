@@ -1,8 +1,8 @@
 package com.course.course.model;
 
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,9 +52,9 @@ public class Course {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createdAt;
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date createdAt;
 
     @Enumerated(EnumType.STRING) // Save as "ACTIVE", not 0
     private Status status;
