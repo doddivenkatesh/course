@@ -12,3 +12,6 @@ public class CourseApplication {
 	}
 	//https://chatgpt.com/share/684a7c5a-797c-800f-854d-6bd07c45ae39
 }
+
+
+//https://teams.microsoft.com/l/message/48:notes/1749713563049?context=%7B%22contextType%22%3A%22chat%22%2C%22oid%22%3A%228%3Aorgid%3A169d2f3e-b099-46c5-9bf0-8fadee078d8f%22%7D
