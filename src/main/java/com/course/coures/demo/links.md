@@ -1,0 +1,1 @@
+https://chatgpt.com/share/68545ee3-2444-8013-8ea2-fdfd34d55f88   // equals and hash code
