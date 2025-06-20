@@ -26,6 +26,7 @@ Copy
 Edit
 ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 UserService userService = context.getBean(UserService.class);
+
 ✅ 3. Dependency Injection (DI) / Inversion of Control (IoC)
 Core pattern in Spring Framework.
 
