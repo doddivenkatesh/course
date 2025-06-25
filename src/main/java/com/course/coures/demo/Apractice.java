@@ -33,3 +33,4 @@ public class Apractice {
 		splitArrayIntoChunk(arr,chunk);
 	}
 }
+//UPDATE EMPLOYEE SET dept = 'Sales' WHERE empId='0001';

@@ -6,6 +6,25 @@ WHERE Salary = (
     WHERE DepartmentId = e.DepartmentId
 );
 
+SELECT e.*
+FROM Employee e
+JOIN (
+    SELECT DepartmentId, MAX(Salary) AS MaxSalary
+    FROM Employee
+    GROUP BY DepartmentId
+) d ON e.DepartmentId = d.DepartmentId AND e.Salary = d.MaxSalary;
+
+
+SELECT e.*
+FROM Employee e
+JOIN (
+    SELECT DepartmentId, MAX(Salary) AS MaxSalary
+    FROM Employee
+    GROUP BY DepartmentId
+) d ON e.DepartmentId = d.DepartmentId AND e.Salary = d.MaxSalary
+LIMIT 10 OFFSET 0;
+
+
 
 🔹 Task 3: SQL Query — Employees with Highest Salary per Department
 Given table:
